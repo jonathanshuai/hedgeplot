@@ -6,10 +6,10 @@ def stylize(ax):
   for spine in ax.spines:
     ax.spines[spine].set_visible(False)
   #Color and set font for the ticks and labels
-  ax.tick_params(axis='both', labelsize=font_size_s, labelcolor=ink_color[0], color=ink_color[0])
+  ax.tick_params(axis='both', labelsize=FONT_SIZE_S, labelcolor=INK_COLOR[0], color=INK_COLOR[0])
 
 #Highlight data (this should be called on the axis corresponding to independent variable)
-def color_data(ticklabels, items, labels, highlight, color=primary_color):
+def color_data(ticklabels, items, labels, highlight, color=PRIMARY_COLOR, highlight_tick=True):
   #If there is no highlight, fill with pri/sec color
   if highlight is None:
     highlight_warning = False
@@ -17,7 +17,7 @@ def color_data(ticklabels, items, labels, highlight, color=primary_color):
   #If there is highlight, fill with ink_color[1] and highlight with pri/sec color
   else:
     highlight_warning = True
-    fill_color = ink_color[1]
+    fill_color = INK_COLOR[1]
     highlight_color = color
 
   #Color the data
@@ -28,19 +28,20 @@ def color_data(ticklabels, items, labels, highlight, color=primary_color):
     #Highlight the specified data
     if not highlight is None and i in highlight:
       highlight_warning = False
-      tick.set_color(highlight_color)
       items[i].set_color(highlight_color)
+      if highlight_tick:
+        tick.set_color(highlight_color)
 
   #Give a warning if there were no highlights
   if highlight_warning:
-    warning.warn('Highlight was specified, but none were found in the labels.', UserWarning)
+    warnings.warn('Highlight was specified, but none were found in the labels.', UserWarning)
 
 #Turn color argument into color code
 def decode_color(color):
   if color == 'primary':
-    return primary_color
+    return PRIMARY_COLOR
   if color == 'secondary':
-    return secondary_color
+    return SECONDARY_COLOR
   else:
     #If matplotlib can't recognize color, we'll get an error later
     return color
@@ -67,4 +68,3 @@ def decode_bar_labels(values, bar_labels):
     return [str(np.round(x * 100 / total).astype('int')) + '%' for x in values] #find percentage values
   else:
     return list(bar_labels) 
-

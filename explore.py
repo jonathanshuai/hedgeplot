@@ -26,33 +26,18 @@ other_df = df[~df['Weapon'].isin(firearms)]['Victim Count']
 values = [firearm_df.sum(), other_df.sum()]
 labels = ('Guns', 'Other')
 
-
-'''
-font_size = 12
-_ink_color = '#d5d8dc'
-_primary_color = '#f5b041'
-
-import matplotlib as mpl
-import matplotlib.pyplot as plt
-
-highlight = ['Guns']
-#BARH DEFINITION; given: labels and data
-fig, ax = plt.subplots()
-bars = ax.barh(labels, values)
-
-
-ax.spines['bottom'].set_visible(True)
-ax.spines['bottom'].set_color(_ink_color)
-ax.tick_params(axis='both', labelsize=font_size, color=_ink_color)
-ax.set_xticks(ax.get_xticks()) #Somehow this adds the last tick
-
-'''
 highlight = ['Guns']
 hplt.create_plot()
-hplt.barh(labels, values, highlight=highlight, color='primary', show_data_axis=False, bar_labels=values)
+hplt.barh(labels, values, highlight=highlight, color='primary', show_data_axis=False, bar_labels=values, bar_labels_pos='in')
 hplt.show()
 
 hplt.barh(labels, values, highlight=highlight, color='secondary', show_data_axis=True, bar_labels='%')
+hplt.show()
+
+hplt.bar(labels, values, highlight=highlight, color='primary', show_data_axis=False, bar_labels=values)
+hplt.show()
+
+hplt.bar(labels,values,  highlight=highlight, color='secondary', show_data_axis=True, bar_labels='%', bar_labels_pos='in', highlight_tick=False)
 hplt.show()
 
 

@@ -1,3 +1,4 @@
 from .hedgestyle import * 
-from .hedgebarh import *
 from .hedgehelper import *
+from .hedgebarh import *
+from .hedgebar import *
