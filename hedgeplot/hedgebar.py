@@ -3,8 +3,51 @@ from .hedgeutil import *
 
 #horizontal bar
 def bar(labels, values, highlight=None, color='primary', show_data_axis=True, 
-        bar_labels=[], bar_labels_pos='out', ax=None, width=BAR_WIDTH,
-        multibar_space_ratio=MULTIBAR_SPACE_RATIO):
+        bar_labels=[], bar_labels_pos='out', width=BAR_WIDTH,
+        multibar_space_ratio=MULTIBAR_SPACE_RATIO, ax=None):
+  """
+
+  Plot a vertical barchart.
+
+  Args:
+      labels (:obj: `array-like`, shape (n_labels)): Labels for bar data.
+      
+      values (:obj: `array-like`, shape (n_labels, n_multibars)): Data for bar heights 
+          (2d for multibars; see examples.)
+      
+      highlight (:obj:`array-like`, shape (n_labels * n_multibars)): Indices or labels (as strings)
+          to highlight. Highlighting will cause all other data items to filled with 'light ink'.
+      
+      color (:obj: `str`, optional): Specify the color to be used for filling in the data. Default is 
+          'primary', which selects the primary color. Other options include 'secondary', 'light ink',
+          'medium ink', 'dark ink', and others. See details about hedgeplot colors for more details.
+      
+      show_data_axis (bool, optional): Default is True. If True, the data axis (corresponding to the
+          dependent variable) is shown. If False, it is hidden (useful when axis is not important).
+      
+      bar_labels (:obj: `array-like`, shape (n_labels * n_multibars), optional): Specify labels to 
+          show on top of the bars. Default is empty, which indicates no labels should be included.
+      
+      bar_labels_pos (:obj: `str`, optional): Default is 'out'. Other option is 'in', which puts the
+          labels inside or outside of the bars. See examples for clarification.
+      
+      width (int, optional): Default is BAR_WIDTH from hedgestyles. Width of the bars (in multibars 
+          it represents the total width of all the bars)
+      
+      multibar_space_ratio (int, optional): Space between multibars. Default is MULTIBAR_SPACE_RATIO 
+          from hedgestyles. 
+      
+      ax (:obj: `matplotlib.axes._subplots.AxesSubplot`, optional): Specify a matplotlib subplot axes
+          to plot the bars on. By default, it uses plt.gca() (current axes).
+
+  Returns:
+      numpy.ndarray: A list of the matplotlib rectangle objects (corresponding to the bars). Same idea
+          as what matplotlib's bar would return. 
+
+  Raises:
+      TypeError: If labels or values is None
+  """
+
   #Type checking
   if labels is None or values is None:
     raise TypeError("Got None for labels or values")
@@ -86,3 +129,5 @@ def bar(labels, values, highlight=None, color='primary', show_data_axis=True,
         else:
           text_color = INK_COLOR[2]
       ax.text(subticks[i], values[i] + space, bar_label, color=text_color, fontsize=FONT_SIZE_M, ha='center', va=align)
+
+  return bars
