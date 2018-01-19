@@ -2,6 +2,8 @@ import time
 
 import numpy as np
 import pandas as pd
+import matplotlib as mpl
+import matplotlib.pyplot as plt
 
 import hedgeplot as hplt
 
@@ -16,31 +18,45 @@ blunt = ['Blunt Object']
 df = pd.read_csv(file_name)
 df = df.dropna()
 
+firearm_df = df[df['Weapon'].isin(firearms)]
+other_df = df[~df['Weapon'].isin(firearms)]
+weapon_values = [firearm_df['Victim Count'].sum(), other_df['Victim Count'].sum()]
+weapon_labels = ['Guns', 'Other']
+weapon_highlight = ['Guns']
 
+state_df = df[['State', 'Victim Count']].groupby('State').count().sort_values('Victim Count').tail()
+state_values = state_df['Victim Count']
+state_labels = state_df.index
+state_highlight=['California']
 
-df2 = df[df['Weapon'].isin(firearms)]
+state_weapon_values = [firearm_df[['State', 'Victim Count']].groupby('State').count().sort_values('Victim Count').tail()['Victim Count'],
+                      other_df[['State', 'Victim Count']].groupby('State').count().sort_values('Victim Count').tail()['Victim Count']]
+#cali tex ny flor mich populations
+populations = [38.99, 27.43, 19.82, 20.24, 9.918]
+prop_state_values = [np.round(a/b).astype('int') for (a,b) in zip(state_values, populations)] #kills per million people
 
-firearm_df = df[df['Weapon'].isin(firearms)]['Victim Count']
-other_df = df[~df['Weapon'].isin(firearms)]['Victim Count']
-
-values = [firearm_df.sum(), other_df.sum()]
-labels = ('Guns', 'Other')
-
-highlight = ['Guns']
 hplt.create_plot()
-hplt.barh(labels, values, highlight=highlight, color='primary', show_data_axis=False, bar_labels=values, bar_labels_pos='in')
+
+#hplt.bar(weapon_labels, weapon_values, highlight=weapon_highlight, color='secondary', show_data_axis=True, bar_labels='%', bar_labels_pos='in', highlight_tick=False)
+#hplt.show()
+
+#hplt.barh(weapon_labels, weapon_values, highlight=weapon_highlight, color='primary', show_data_axis=True, bar_labels=weapon_values, bar_labels_pos='out')
+#hplt.show()
+
+#hplt.barh(state_labels, state_values, highlight=state_highlight, color='secondary', show_data_axis=True, bar_labels=state_values, bar_labels_pos='out')
+#hplt.show()
+
+#hplt.bar(weapon_labels, weapon_values, highlight=weapon_highlight, color='primary', show_data_axis=True, bar_labels=weapon_values, bar_labels_pos='out')
+#hplt.show()
+
+#hplt.bar(state_labels, [a*1.2 for a in prop_state_values], color='light', show_data_axis=True, bar_labels=prop_state_values, bar_labels_pos='out')
+#hplt.barh(state_labels, prop_state_values, highlight=state_highlight, color='secondary', show_data_axis=True, bar_labels_pos='out')
+#hplt.barh(weapon_labels, weapon_values, highlight=weapon_highlight, bar_labels=weapon_values, color='secondary', show_data_axis=True, bar_labels_pos='out')
+#hplt.show()
+hplt.barh(weapon_labels, state_weapon_values, highlight=[[1], [2]], bar_labels=state_weapon_values, color='primary', show_data_axis=True, bar_labels_pos='out')
 hplt.show()
-
-hplt.barh(labels, values, highlight=highlight, color='secondary', show_data_axis=True, bar_labels='%')
+hplt.bar(weapon_labels, state_weapon_values, highlight=[[1], [2]], color='secondary', show_data_axis=True, bar_labels_pos='out')
 hplt.show()
-
-hplt.bar(labels, values, highlight=highlight, color='primary', show_data_axis=False, bar_labels=values)
-hplt.show()
-
-hplt.bar(labels,values,  highlight=highlight, color='secondary', show_data_axis=True, bar_labels='%', bar_labels_pos='in', highlight_tick=False)
-hplt.show()
-
-
 
 
 
