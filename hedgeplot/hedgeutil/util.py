@@ -1,7 +1,8 @@
-from .hedgestyle import *
-#Alphabet list to help get around matplotlib's stupid label sorting
-ALPHABET = list('abcdefghijklmnopqrstuvwxyz')
+#General utility functions to be used throughout all types of charts
+import matplotlib.patches as mpatches
+import matplotlib.lines as mlines 
 
+from ..hedgestyle import *
 #Dictionary of colors to look up 
 _color_dict = {'primary':   PRIMARY_COLOR, 
               'secondary':  SECONDARY_COLOR, 
@@ -14,6 +15,10 @@ _color_dict = {'primary':   PRIMARY_COLOR,
               'ink3':       INK_COLOR[2],
               'dark':       INK_COLOR[2],
               'dark ink':   INK_COLOR[2]
+              }
+
+_shape_dict = { 'box': (mpatches.Patch, {}),
+                'line': (mlines.Line2D, {'xdata':[], 'ydata':[]})
               }
 
 #General styling that (nearly) all plots will use
@@ -58,38 +63,12 @@ def decode_color(color):
     #If matplotlib can't recognize color, we'll get an error later
     return color
 
-#Turn highlight argument into a list of array indices (to be used on labels)
-def decode_highlight(labels, values, highlight):
-  if highlight is None:
-    return None
-  #Make sure highlight is a list
-  if type(highlight) is str: 
-    highlight = np.array([highlight])
-  else:
-    highlight = np.array(highlight)
+#For legend markers
+def get_handles(shapes, colors, labels):
+  if type(shapes) is str:
+    shapes = [shapes] * len(colors)
 
-  indices = []
-  if highlight.ndim == 1:
-    for i, l in enumerate(labels):
-      if l in highlight:
-        indices.append(i)
-
-    if values.ndim == 2: #We have to highlight n_split for each index
-      n_splits = values.shape[1]
-      indices = np.array([np.arange(index * n_splits, (index + 1) * n_splits) for index in indices]).ravel() 
-
-    return indices
-  else:
-    n_splits = values.shape[1]
-    for i, index_set in enumerate(highlight):
-      indices.extend([ index + (i * n_splits) for index in index_set])
-    return indices
-
-
-#Turn bar labels argument into percentages or a list of values. Didn't check for None.
-def decode_bar_labels(values, bar_labels):
-  if type(bar_labels) is str and ('percent' in bar_labels or bar_labels == '%'):
-    total = np.sum(values)
-    return [str(np.round(x * 100 / total).astype('int')) + '%' for x in values] #find percentage values
-  else:
-    return list(bar_labels) 
+  colors = [decode_color(color) for color in colors]
+  shapes = [_shape_dict[shape] if shape in _shape_dict else shape for shape in shapes]
+  handles = [shape(**args, color=color, label=label, ) for (shape, args), color, label in zip(shapes, colors, labels)]
+  return handles

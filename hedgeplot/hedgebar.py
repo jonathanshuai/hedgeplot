@@ -1,12 +1,11 @@
+#Plot a vertical bar chart
 from .hedgestyle import *
 from .hedgeutil import *
 
-#horizontal bar
 def bar(labels, values, highlight=None, color='primary', show_data_axis=True, 
-        bar_labels=[], bar_labels_pos='out', width=BAR_WIDTH,
+        show_label_axis=False, bar_labels=[], bar_labels_pos='out', width=BAR_WIDTH,
         multibar_space_ratio=MULTIBAR_SPACE_RATIO, ax=None):
   """
-
   Plot a vertical barchart.
 
   Args:
@@ -15,15 +14,19 @@ def bar(labels, values, highlight=None, color='primary', show_data_axis=True,
       values (:obj: `array-like`, shape (n_labels, n_multibars)): Data for bar heights 
           (2d for multibars; see examples.)
       
-      highlight (:obj:`array-like`, shape (n_labels * n_multibars)): Indices or labels (as strings)
-          to highlight. Highlighting will cause all other data items to filled with 'light ink'.
+      highlight (:obj:`array-like`, shape (n_labels * n_multibars), optional): Indices or labels 
+          (as strings) to highlight. Highlighting will cause all other data items to filled with 
+          'light ink'.
       
       color (:obj: `str`, optional): Specify the color to be used for filling in the data. Default is 
           'primary', which selects the primary color. Other options include 'secondary', 'light ink',
-          'medium ink', 'dark ink', and others. See details about hedgeplot colors for more details.
+          'medium ink', 'dark ink', and others. See hedgeplot styles and colors for more details.
       
       show_data_axis (bool, optional): Default is True. If True, the data axis (corresponding to the
           dependent variable) is shown. If False, it is hidden (useful when axis is not important).
+
+      show_label_axis (bool, optional): Default is False. If True, the label axis (corresponding to the
+          independent variable) is shown (sometimes you want a separation). If False, it is hidden.
       
       bar_labels (:obj: `array-like`, shape (n_labels * n_multibars), optional): Specify labels to 
           show on top of the bars. Default is empty, which indicates no labels should be included.
@@ -34,7 +37,7 @@ def bar(labels, values, highlight=None, color='primary', show_data_axis=True,
       width (int, optional): Default is BAR_WIDTH from hedgestyles. Width of the bars (in multibars 
           it represents the total width of all the bars)
       
-      multibar_space_ratio (int, optional): Space between multibars. Default is MULTIBAR_SPACE_RATIO 
+      multibar_space_ratio (int, range[0, 1) optional): Space between multibars. Default is MULTIBAR_SPACE_RATIO 
           from hedgestyles. 
       
       ax (:obj: `matplotlib.axes._subplots.AxesSubplot`, optional): Specify a matplotlib subplot axes
@@ -61,7 +64,7 @@ def bar(labels, values, highlight=None, color='primary', show_data_axis=True,
     ax = plt.gca()
 
   #Decode arguments
-  highlight = decode_highlight(labels, values, highlight)
+  highlight = decode_bar_highlight(labels, values, highlight)
   color = decode_color(color)
   bar_labels = decode_bar_labels(values, bar_labels)
 
@@ -106,6 +109,11 @@ def bar(labels, values, highlight=None, color='primary', show_data_axis=True,
   else:
     #Hide the labels and ticks
     ax.tick_params(axis='y', left='off', labelleft='off')
+  
+  #Format the label axis (independent variable)
+  if show_label_axis:
+    ax.spines['bottom'].set_visible(True)
+    ax.spines['bottom'].set_color(INK_COLOR[0])
 
   #Color the data (note: we don't care about the 0th place)
   color_data(bars, labels, highlight, color)

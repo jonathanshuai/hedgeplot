@@ -1,44 +1,26 @@
-#Plot a horizontal bar chart
+#Plot a line chart
 from .hedgestyle import *
 from .hedgeutil import *
 
-def barh(labels, values, highlight=None, color='primary', show_data_axis=True,
-         show_label_axis=False, bar_labels=[], bar_labels_pos='out', height=BAR_HEIGHT,
-        multibar_space_ratio=MULTIBAR_SPACE_RATIO, ax=None):
+def plot(xdata, ydata, highlight=None, color='primary', line_label='', ax=None):
   """
   Plot a horizontal barchart. Note that the order goes from bottom to top for plotting
 
   Args:
-      labels (:obj: `array-like`, shape (n_labels)): Labels for bar data.
+      xdata (:obj: `array-like`, shape (n_labels)): Labels for bar data.
 
-      values (:obj: `array-like`, shape (n_labels, n_multibars)): Data for bar widths 
+      ydata (:obj: `array-like`, shape (n_labels, n_multibars)): Data for bar widths 
           (2d for multibars; see examples.)
       
-      highlight (:obj:`array-like`, shape (n_labels * n_multibars), optional): Indices or labels 
-          (as strings) to highlight. Highlighting will cause all other data items to filled with 
-          'light ink'.
-
+      highlight (:obj:`array-like`, optional): Indices or labels (as strings)
+          to highlight. Highlighting will cause all other data items to filled with 'light ink'.
+      
       color (:obj: `str`, optional): Specify the color to be used for filling in the data. Default is 
           'primary', which selects the primary color. Other options include 'secondary', 'light ink',
           'medium ink', 'dark ink', and others. See hedgeplot styles and colors for more details.
       
-      show_data_axis (bool, optional): Default is True. If True, the data axis (corresponding to the
-          dependent variable) is shown. If False, it is hidden (useful when axis is not important).
-
-      show_label_axis (bool, optional): Default is False. If True, the label axis (corresponding to the
-          independent variable) is shown (sometimes you want a separation). If False, it is hidden.
-
-      bar_labels (:obj: `array-like`, shape (n_labels * n_multibars), optional): Specify labels to 
-          show on right of the bars. Default is empty, which indicates no labels should be included.
-      
-      bar_labels_pos (:obj: `str`, optional): Default is 'out'. Other option is 'in', which puts the
-          labels inside or outside of the bars. See examples for clarification.
-      
-      height (int, optional): Default is BAR_HEIGHT from hedgestyles. height of the bars (in multibars 
-          it represents the total height of all the bars)
-      
-      multibar_space_ratio (int, range[0, 1) optional): Space between multibars. Default is MULTIBAR_SPACE_RATIO 
-          from hedgestyles. 
+      line_label (:obj: `str`, optional): Specify label to show next to the plotted line. Default is empty, 
+          which indicates no labels should be included.
       
       ax (:obj: `matplotlib.axes._subplots.AxesSubplot`, optional): Specify a matplotlib subplot axes
           to plot the bars on. By default, it uses plt.gca() (current axes).
@@ -52,11 +34,11 @@ def barh(labels, values, highlight=None, color='primary', show_data_axis=True,
   """
 
   #Type checking
-  if labels is None or values is None:
-    raise TypeError("Got None for labels or values")
-  labels = np.array(labels)
-  values = np.array(values)
-  assert len(labels) == len(values), "Labels and values have unequal lengths!" 
+  if xdata is None or ydata is None:
+    raise TypeError("Got None for xdata or ydata")
+  xdata = np.array(xdata)
+  ydata = np.array(ydata)
+  assert len(xdata) == len(ydata), "xdata and ydata have unequal lengths!" 
   assert highlight is None or np.array(highlight).ndim == values.ndim, "Highlight and values have different dimensions!"
 
   #Get current axis if necessary
@@ -64,7 +46,7 @@ def barh(labels, values, highlight=None, color='primary', show_data_axis=True,
     ax = plt.gca()
 
   #Decode arguments
-  highlight = decode_bar_highlight(labels, values, highlight)
+  highlight = decode_highlight(labels, values, highlight)
   color = decode_color(color)
   bar_labels = decode_bar_labels(values, bar_labels)
 
