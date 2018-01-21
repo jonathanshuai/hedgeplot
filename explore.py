@@ -81,26 +81,26 @@ values = state_values
 
 
 #Labels
-#fig, ax = hplt.create_plot()
+fig, ax = hplt.create_plot()
 #hplt.barh(labels, values, highlight='California', bar_labels=values)
 #hplt.show()
 
-#hplt.barh(labels, values, highlight='California', bar_labels='%')
-#hplt.show()
+hplt.barh(labels, values, highlight='California', bar_labels='%', bar_labels_pos='in')
+hplt.show()
 
 #2d example
 #fig, ax = hplt.create_plot()
 #hplt.barh(['Group 1', 'Group 2'], [[1,2,3], [5,4,3]], highlight='Group 1')
 #hplt.show()
 
-#labels = weapon_labels
-#values = state_weapon_values #2d array [[1, 2, 3], [3, 2, 1]]
-#hplt.barh(labels, values, highlight=[[4],[4]], bar_labels=values, bar_labels_pos='in')
-#hplt.title("States With The Most Homicides (1980-2014)")
-#hplt.ylabel("Weapon Type")
-#hplt.xlabel("Number of Incidents")
-#hplt.legend(['medium','medium','medium','medium','primary'], ['Michigan', 'Florida', 'New York', 'Texas', 'California'], loc='upper right', layout='v')
-#hplt.show()
+labels = weapon_labels
+values = state_weapon_values #2d array [[1, 2, 3], [3, 2, 1]]
+hplt.barh(labels, values, highlight=[[4],[4]], bar_labels=values)
+hplt.title("States With The Most Homicides (1980-2014)")
+hplt.ylabel("Weapon Type")
+hplt.xlabel("Number of Incidents")
+hplt.legend(['medium','medium','medium','medium','primary'], ['Michigan', 'Florida', 'New York', 'Texas', 'California'], loc='upper right', layout='v')
+hplt.show()
 
 #hplt.bar(weapon_labels, weapon_values, highlight=weapon_highlight, color='secondary', show_data_axis=True, bar_labels='%', bar_labels_pos='in', highlight_tick=False)
 #hplt.show()
@@ -136,10 +136,11 @@ ydata = [year_df[year_df.index == 1980], year_df[year_df.index == 1985],
           year_df[year_df.index == 2010]]
 ydata = [y.values[0] for y in ydata]
 
-#hplt.plot(['a','b','c','d', 'e'], [2,3,1,6,5],  highlight=[['a','b'],['c','d'],['c','e']])
+#xdata is the years 1980, 1985,... 2010
+#ydata is the number of homicides for each year in xdata 
 hplt.plot(xdata, ydata, highlight=[[1995, 2000]], line_label='Murder Trend')
-hplt.title("Homocide Trends In The US (1980-2010)")
-hplt.ylabel("Number of Homocides")
+hplt.title("Homicide Trends In The US (1980-2010)")
+hplt.ylabel("Number of Homicides")
 hplt.xlabel("Year")
 hplt.show()
 
