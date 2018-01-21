@@ -11,6 +11,9 @@ def decode_bar_highlight(labels, values, highlight):
   else:
     highlight = np.array(highlight)
 
+  if type(highlight[0]) is np.int64:
+    return highlight
+
   indices = []
   if highlight.ndim == 1:
     for i, l in enumerate(labels):
@@ -29,9 +32,17 @@ def decode_bar_highlight(labels, values, highlight):
     return indices
 
 #Turn bar labels argument into percentages or a list of values. Didn't check for None.
+#Also it does it across classes... update to select axis later?
 def decode_bar_labels(values, bar_labels):
   if type(bar_labels) is str and ('percent' in bar_labels or bar_labels == '%'):
-    total = np.sum(values)
-    return [str(np.round(x * 100 / total).astype('int')) + '%' for x in values] #find percentage values
+    if values.ndim == 1:
+      total = np.sum(values)    
+      return [str(np.round(x * 100 / total).astype('int')) + '%' for x in values] #find percentage values
+    else:
+      formatted = []
+      for v in values:
+        total = np.sum(v)    
+        formatted.append([str(np.round(x * 100 / total).astype('int')) + '%' for x in v]) #find percentage values
+    return formatted
   else:
     return list(bar_labels) 

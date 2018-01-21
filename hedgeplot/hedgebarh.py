@@ -57,7 +57,6 @@ def barh(labels, values, highlight=None, color='primary', show_data_axis=True,
   labels = np.array(labels)
   values = np.array(values)
   assert len(labels) == len(values), "Labels and values have unequal lengths!" 
-  assert highlight is None or np.array(highlight).ndim == values.ndim, "Highlight and values have different dimensions!"
 
   #Get current axis if necessary
   if ax is None:
@@ -65,6 +64,7 @@ def barh(labels, values, highlight=None, color='primary', show_data_axis=True,
 
   #Decode arguments
   highlight = decode_bar_highlight(labels, values, highlight)
+  #assert highlight is None or np.array(highlight).ndim == values.ndim, "Highlight and values have different dimensions!"
   color = decode_color(color)
   bar_labels = decode_bar_labels(values, bar_labels)
 
@@ -116,7 +116,7 @@ def barh(labels, values, highlight=None, color='primary', show_data_axis=True,
     ax.spines['left'].set_color(INK_COLOR[0])
 
   #Color the data (note: we don't care about the 0th place)
-  color_data(bars, labels, highlight, color)
+  color_data(bars, highlight, color)
 
   #Bar labels
   if len(bar_labels):
@@ -135,7 +135,8 @@ def barh(labels, values, highlight=None, color='primary', show_data_axis=True,
         if not highlight is None and i in highlight:
           text_color = color
         else:
-          text_color = INK_COLOR[2]
-      ax.text(values[i] + space, subticks[i], bar_label, color=text_color, fontsize=FONT_SIZE_M, va='center', ha=align)
+          text_color = INK_COLOR[2] 
+      #not sure about this 0.01 thing... maybe va='center' is off by a bit? 
+      ax.text(values[i] + space, subticks[i] - 0.01, bar_label, color=text_color, fontsize=FONT_SIZE_M, va='center', ha=align)
 
   return bars

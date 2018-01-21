@@ -2,7 +2,7 @@
 from .hedgestyle import *
 from .hedgeutil import *
 
-def plot(xdata, ydata, highlight=None, color='primary', line_label='', ax=None):
+def plot(xdata, ydata, highlight=None, color='primary', line_label='', linewidth=LINE_WIDTH, linestyle='-', ax=None):
   """
   Plot a horizontal barchart. Note that the order goes from bottom to top for plotting
 
@@ -39,85 +39,61 @@ def plot(xdata, ydata, highlight=None, color='primary', line_label='', ax=None):
   xdata = np.array(xdata)
   ydata = np.array(ydata)
   assert len(xdata) == len(ydata), "xdata and ydata have unequal lengths!" 
-  assert highlight is None or np.array(highlight).ndim == values.ndim, "Highlight and values have different dimensions!"
 
   #Get current axis if necessary
   if ax is None:
     ax = plt.gca()
 
   #Decode arguments
-  highlight = decode_highlight(labels, values, highlight)
+  xdata_splits, ydata_splits = split_line_highlight(xdata, ydata, highlight)
   color = decode_color(color)
-  bar_labels = decode_bar_labels(values, bar_labels)
 
-  #Create the plot 
-  ticks = np.arange(len(labels))
-  if values.ndim == 2:
-    #Calculate the subticks for multiple bars
-    bars = []
-    subticks = []
-    n_splits = values.shape[1]
-    offset = height / n_splits
-    start_offset = (height - offset) / 2
-    for i in range(values.shape[0]):
-      start = i - start_offset
-      subticks.extend([start + t * offset for t in np.arange(n_splits)])
-
-    thickness = offset * (1 - multibar_space_ratio)
-    values = values.ravel() #flatten values
-    subticks = np.array(subticks) #turn subticks into nparray 
-    bars.append(ax.barh(subticks, values, height=thickness))
-    bars = np.array(bars).T.ravel()
-    print(subticks)
-  else:
-    bars = ax.barh(ticks, values, height=height)
-    subticks = ticks
-
-  ax.set_yticks(ticks)
-  ax.set_yticklabels(labels)
+  print(xdata_splits)
+  print(ydata_splits)
+  
+  #Create the plot
+  lines = []
+  index = 0
+  highlight_segment = False
+  highlight_indices = []
+  for (xsegment, ysegment) in zip(xdata_splits, ydata_splits):
+    if xsegment != []:
+      line = ax.plot(xsegment, ysegment, linewidth=linewidth, linestyle=linestyle)
+      lines.extend(line)
+      if highlight_segment:
+        highlight_indices.append(index)
+      index += 1
+    highlight_segment = not highlight_segment
 
   #Basic styling
   stylize(ax)
 
   #Remove y ticks
-  ax.tick_params(axis='y', left='off', labelsize=FONT_SIZE_M, labelcolor=INK_COLOR[2])
+  #ax.tick_params(axis='y', left='off', labelsize=FONT_SIZE_M, labelcolor=INK_COLOR[2])
 
   #Format data axis (dependent variable)
-  if show_data_axis:
-    #Show the data axis (spine)
-    ax.spines['bottom'].set_visible(True)
-    ax.spines['bottom'].set_color(INK_COLOR[0])
-    ax.set_xticks(ax.get_xticks()) #Somehow this adds the last tick
-  else:
-    #Hide the labels and ticks
-    ax.tick_params(axis='x', bottom='off', labelbottom='off')
+  #Show the data axis (spine)
+  ax.spines['left'].set_visible(True)
+  ax.spines['left'].set_color(INK_COLOR[0])
+  ax.set_yticks(ax.get_yticks()) #Somehow this adds the last tick
 
   #Format the label axis (independent variable)
-  if show_label_axis:
-    ax.spines['left'].set_visible(True)
-    ax.spines['left'].set_color(INK_COLOR[0])
+  ax.spines['bottom'].set_visible(True)
+  ax.spines['bottom'].set_color(INK_COLOR[0])
 
   #Color the data (note: we don't care about the 0th place)
-  color_data(bars, labels, highlight, color)
+  if not highlight is None:
+    highlight = highlight_indices
+  color_data(lines, highlight, color)
 
-  #Bar labels
-  if len(bar_labels):
-    #Flatten out the bar labels and values to make this easy (in case of multiple bar plot)
-    bar_labels = np.array(bar_labels).ravel()
-    space = ax.get_xticks()[1] * H_BAR_PAD_RATIO 
-    align = 'left'
-    if bar_labels_pos == 'in':
-      space = -space
-      align = 'right'
+  #Line label
+  ticks = ax.get_xticks()
+  space = (ticks[1] - ticks[0]) * LINE_LABEL_PAD_RATIO
+  ypos = ydata[-1]
+  xpos = xdata[-1]
+  if highlight is None:
+    text_color = color
+  else:
+    text_color = INK_COLOR[2]
 
-    for i, bar_label in enumerate(bar_labels):
-      if bar_labels_pos == 'in':
-        text_color = 'white'
-      else:
-        if not highlight is None and i in highlight:
-          text_color = color
-        else:
-          text_color = INK_COLOR[2]
-      ax.text(values[i] + space, subticks[i], bar_label, color=text_color, fontsize=FONT_SIZE_M, va='center', ha=align)
-
-  return bars
+  ax.text(xpos + space, ypos, line_label, color=text_color, fontsize=FONT_SIZE_M, ha='left', va='center')

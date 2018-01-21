@@ -26,4 +26,7 @@ V_BAR_PAD_RATIO = 0.20
 BAR_HEIGHT = 0.4
 BAR_WIDTH = 0.4
 MULTIBAR_SPACE_RATIO = 0.35 #This should be 0~1 (otherwise error)
+
+LINE_WIDTH = 2
+LINE_LABEL_PAD_RATIO = 0.15 
 #def choose_palette(palette=None, ink=_ink_color, primary=_primary_color, secondary=_secondary_color):

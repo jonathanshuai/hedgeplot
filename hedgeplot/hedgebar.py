@@ -57,7 +57,6 @@ def bar(labels, values, highlight=None, color='primary', show_data_axis=True,
   labels = np.array(labels)
   values = np.array(values)
   assert len(labels) == len(values), "Labels and values have unequal lengths!" 
-  assert highlight is None or np.array(highlight).ndim == values.ndim, "Highlight and values have different dimensions!"
 
   #Get current axis if necessary
   if ax is None:
@@ -65,6 +64,7 @@ def bar(labels, values, highlight=None, color='primary', show_data_axis=True,
 
   #Decode arguments
   highlight = decode_bar_highlight(labels, values, highlight)
+  #assert highlight is None or np.array(highlight).ndim == values.ndim, "Highlight and values have different dimensions!"
   color = decode_color(color)
   bar_labels = decode_bar_labels(values, bar_labels)
 
@@ -116,7 +116,7 @@ def bar(labels, values, highlight=None, color='primary', show_data_axis=True,
     ax.spines['bottom'].set_color(INK_COLOR[0])
 
   #Color the data (note: we don't care about the 0th place)
-  color_data(bars, labels, highlight, color)
+  color_data(bars, highlight, color)
 
   #Bar labels
   if len(bar_labels):

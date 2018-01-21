@@ -30,7 +30,7 @@ def stylize(ax):
   ax.tick_params(axis='both', labelsize=FONT_SIZE_S, labelcolor=INK_COLOR[0], color=INK_COLOR[0])
 
 #Highlight data (this should be called on the axis corresponding to independent variable)
-def color_data(items, labels, highlight, color=PRIMARY_COLOR):
+def color_data(items, highlight, color=PRIMARY_COLOR):
   #If there is no highlight, fill with color
   if highlight is None:
     highlight_warning = False
