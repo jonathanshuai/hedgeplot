@@ -94,8 +94,8 @@ hplt.title("States With The Most Homicides (1980-2014)")
 hplt.ylabel("Weapon Type")
 hplt.xlabel("Number of Incidents")
 hplt.legend(['medium','medium','medium','medium','primary'], 
-						['Michigan', 'Florida', 'New York', 'Texas', 'California'], 
-						loc='upper right', layout='v') #medium and primary will be explained more in the colors section
+	['Michigan', 'Florida', 'New York', 'Texas', 'California'], 
+	loc='upper right', layout='v') #medium and primary will be explained more in the colors section
 ```
 
 ![alt text](https://github.com/jonathanshuai/hedgeplot/blob/master/examples/complicated1.png?raw=true)
