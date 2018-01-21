@@ -85,7 +85,7 @@ fig, ax = hplt.create_plot()
 #hplt.barh(labels, values, highlight='California', bar_labels=values)
 #hplt.show()
 
-hplt.barh(labels, values, highlight='California', bar_labels='%', bar_labels_pos='in')
+hplt.barh(labels, values, color='secondary', highlight='California', bar_labels='%', bar_labels_pos='in')
 hplt.show()
 
 #2d example
