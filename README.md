@@ -87,15 +87,15 @@ hplt.barh(['Group 1', 'Group 2'], [[1,2,3], [5,4,3]], highlight='Group 1')
 
 For a more complete example:
 ```python
-labels = weapon_labels #['Guns', 'Others']
-values = state_weapon_values #2d array: [guns deaths per state, other deaths per state]
-hplt.barh(labels, values, highlight=[[4],[4]], bar_labels=values) #Highlight the 4th index for each group
-hplt.title("States With The Most Homicides (1980-2014)") #Create a title
-hplt.ylabel("Weapon Type") #Create a label for the y axis
-hplt.xlabel("Number of Incidents") #Create a label for the x axis
+#labels = ['Guns', 'Others']
+#values = 2d array: [guns deaths per state, other deaths per state]
+hplt.barh(labels, values, highlight=[[4],[4]], bar_labels=values)
+hplt.title("States With The Most Homicides (1980-2014)")
+hplt.ylabel("Weapon Type")
+hplt.xlabel("Number of Incidents")
 hplt.legend(['medium','medium','medium','medium','primary'], 
-['Michigan', 'Florida', 'New York', 'Texas', 'California'], 
-loc='upper right', layout='v') #Create a legend. medium and primary will be explained more in the colors section
+						['Michigan', 'Florida', 'New York', 'Texas', 'California'], 
+						loc='upper right', layout='v') #medium and primary will be explained more in the colors section
 ```
 
 ![alt text](https://github.com/jonathanshuai/hedgeplot/blob/master/examples/complicated1.png?raw=true)
