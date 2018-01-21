@@ -69,9 +69,9 @@ hplt.barh(labels, values, highlight='California', bar_labels=values)
 
 The labels can be a list of strings too. 
 
-Passing in a % sign will calculate percentages of the total for each bar:
+Passing in a % sign will calculate percentages of the total for each bar. The bar label position argument puts the labels inside the bar:
 ```
-hplt.barh(labels, values, highlight='California', bar_labels='%')
+hplt.barh(labels, values, highlight='California', bar_labels='%', bar_label_pos='in')
 ```
 
 ![alt text](https://github.com/jonathanshuai/hedgeplot/blob/master/examples/hplt_percent_label.png?raw=true)
@@ -80,8 +80,7 @@ Note that the horizontal bar chart plots bars from bottom to top.
 
 Passing in a 2d array for the values will create two groups of bars; with the rows as groups:
 ```
-hplt.barh(['Group 1', 'Group 2'], [[1,2,3], [5,4,3]], highlight='Group 1', bar_label_pos='in')
-hplt.show()
+hplt.barh(['Group 1', 'Group 2'], [[1,2,3], [5,4,3]], highlight='Group 1')
 ```
 
 ![alt text](https://github.com/jonathanshuai/hedgeplot/blob/master/examples/hplt_2d_basic_example.png)
