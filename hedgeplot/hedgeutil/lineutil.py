@@ -4,7 +4,7 @@ from ..hedgestyle import *
 #Turn highlight argument into a list of array indices (to be used on labels)
 def split_line_highlight(xdata, ydata, highlight):
   if highlight is None:
-    return [xdata]
+    return [xdata], [ydata]
 
   highlight = np.array(highlight)
   #Make sure highlight is a 2d np array

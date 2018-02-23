@@ -48,9 +48,6 @@ def plot(xdata, ydata, highlight=None, color='primary', line_label='', linewidth
   xdata_splits, ydata_splits = split_line_highlight(xdata, ydata, highlight)
   color = decode_color(color)
 
-  print(xdata_splits)
-  print(ydata_splits)
-  
   #Create the plot
   lines = []
   index = 0
@@ -89,8 +86,8 @@ def plot(xdata, ydata, highlight=None, color='primary', line_label='', linewidth
   #Line label
   ticks = ax.get_xticks()
   space = (ticks[1] - ticks[0]) * LINE_LABEL_PAD_RATIO
-  ypos = ydata[-1]
-  xpos = xdata[-1]
+  ypos = ax.get_yticks()[-1]
+  xpos = ax.get_xticks()[-1]
   if highlight is None:
     text_color = color
   else:
